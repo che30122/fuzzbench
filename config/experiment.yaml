@@ -1,0 +1,22 @@
+benchmarks:
+- freetype2-2017
+- bloaty_fuzz_target
+concurrent_builds: null
+description: null
+docker_registry: gcr.io/fuzzbench
+experiment: testchefuzzer
+experiment_filestore: /tmp/experiment-data
+fuzzers:
+- afl
+- libfuzzer
+git_hash: 81d0ed8a4a654f014ec1225edd93bea0a08c66be
+local_experiment: true
+max_total_time: 3600
+no_dictionaries: false
+no_seeds: false
+oss_fuzz_corpus: false
+report_filestore: /tmp/report-data
+runner_machine_type: n1-standard-1
+runner_memory: 12GB
+runner_num_cpu_cores: 1
+trials: 1
