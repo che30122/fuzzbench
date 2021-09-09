@@ -9,7 +9,7 @@ experiment_filestore: /tmp/experiment-data
 fuzzers:
 - afl
 - libfuzzer
-git_hash: 81d0ed8a4a654f014ec1225edd93bea0a08c66be
+git_hash: 0187a3ba79df53a17c7689e9467526ad916e0a7d
 local_experiment: true
 max_total_time: 3600
 no_dictionaries: false
