@@ -56,7 +56,7 @@ def _get_makefile_run_template(image):
             section += f'.{fuzzer}-{benchmark}-runner\n'
 
         section += f'\
-\tdocker run \\\n\
+\tsudo docker run \\\n\
 \t--cpus=1 \\\n\
 \t--cap-add SYS_NICE \\\n\
 \t--cap-add SYS_PTRACE \\\n\
@@ -115,8 +115,8 @@ def get_rules_for_image(name, image):
                 section += ' .' + dep
     section += '\n'
     if 'base-' in name:
-        section += '\tdocker pull ubuntu:xenial\n'
-    section += '\tdocker build \\\n'
+        section += '\tsudo docker pull ubuntu:xenial\n'
+    section += '\tsudo docker build \\\n'
     section += '\t--tag ' + os.path.join(BASE_TAG, image['tag']) + ' \\\n'
     section += '\t--build-arg BUILDKIT_INLINE_CACHE=1 \\\n'
     section += ('\t--cache-from ' + os.path.join(BASE_TAG, image['tag']) +

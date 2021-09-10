@@ -19,8 +19,15 @@ FROM $parent_image
 # Set AFL_NO_X86 to skip flaky tests.
 RUN git clone https://github.com/che30122/AFL.git /afl && \
     cd /afl && \
-    AFL_NO_X86=1 make \
-	cd ../llvm_mode && cfg_file_path="./CFG" make
+    AFL_NO_X86=1 make 
+RUN apt-get install -y llvm-3.9 llvm-3.9-dev 
+RUN apt-get install -y clang-3.9
+RUN update-alternatives --install /usr/local/bin/clang clang /usr/bin/clang-3.9 100
+RUN update-alternatives --install /usr/local/bin/clang++ clang++ /usr/bin/clang++-3.9 100
+RUN update-alternatives --config clang
+RUN update-alternatives --config clang++
+RUN echo `clang --version`
+RUN cd /afl/llvm_mode && export LLVM_CONFIG="llvm-config-3.9" && export cfg_file_path="./CFG" && CFLAGS="" CXXFLAGS="" make
 
 # Use afl_driver.cpp from LLVM as our fuzzing library.
 RUN apt-get update && \
