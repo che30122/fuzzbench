@@ -17,6 +17,7 @@ FROM $parent_image
 
 # Download and compile AFL v2.56b.
 # Set AFL_NO_X86 to skip flaky tests.
+#RUN echo "start"
 RUN git clone https://github.com/che30122/AFL.git /afl && \
     cd /afl && \
     AFL_NO_X86=1 make 
@@ -33,6 +34,6 @@ RUN cd /afl/llvm_mode && export LLVM_CONFIG="llvm-config-3.9" && export cfg_file
 RUN apt-get update && \
     apt-get install wget -y && \
     wget https://raw.githubusercontent.com/llvm/llvm-project/5feb80e748924606531ba28c97fe65145c65372e/compiler-rt/lib/fuzzer/afl/afl_driver.cpp -O /afl/afl_driver.cpp && \
-    clang -Wno-pointer-sign -c /afl/llvm_mode/afl-llvm-rt.o.c -I/afl && \
     clang++ -stdlib=libc++ -std=c++11 -O2 -c /afl/afl_driver.cpp && \
+	#clang -shared -Wno-pointer-sign -c /afl/llvm_mode/afl-llvm-rt.o.c -I/afl && \
     ar r /libAFL.a *.o

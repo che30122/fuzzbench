@@ -24,9 +24,10 @@ from fuzzers import utils
 def prepare_build_environment():
     """Set environment variables used to build targets for AFL-based
     fuzzers."""
-    cflags = ['-fsanitize-coverage=trace-pc-guard']
+    cflags = []#['-fsanitize-coverage=trace-pc-guard']
     utils.append_flags('CFLAGS', cflags)
     utils.append_flags('CXXFLAGS', cflags)
+    #utils.append_flags('')
     os.environ['cfg_file_path']='/afl/CFG'
     os.environ['CC'] = '/afl/afl-clang-fast'
     os.environ['CXX'] = '/afl/afl-clang-fast++'
@@ -42,7 +43,8 @@ def build():
     print('[post_build] Copying afl-fuzz to $OUT directory')
     # Copy out the afl-fuzz binary as a build artifact.
     shutil.copy('/afl/afl-fuzz', os.environ['OUT'])
-
+    shutil.copy('/afl/CFG',os.environ['OUT'])
+    shutil.copy('/afl/afl-fuzz.c',os.environ['OUT'])
 
 def get_stats(output_corpus, fuzzer_log):  # pylint: disable=unused-argument
     """Gets fuzzer stats for AFL."""
@@ -110,7 +112,7 @@ def run_afl_fuzz(input_corpus,
         'none',
         '-t',
         '1000+',  # Use same default 1 sec timeout, but add '+' to skip hangs.
-        '-F','/afl/CFG'
+        '-F','./CFG'
     ]
     # Use '-d' to skip deterministic mode, as long as it it compatible with
     # additional flags.
