@@ -1,6 +1,5 @@
 benchmarks:
 - freetype2-2017
-- bloaty_fuzz_target
 concurrent_builds: null
 description: null
 docker_registry: gcr.io/fuzzbench
@@ -8,9 +7,8 @@ experiment: chefuzzer
 experiment_filestore: /tmp/experiment-data
 fuzzers:
 - afl
-- libfuzzer
 - che_fuzz
-git_hash: 40adb2d388ae01d9365b556f8fa60cbc5ba48de7
+git_hash: dadc20115d382a08b541c93136d47a39b7c1c9aa
 local_experiment: true
 max_total_time: 60
 no_dictionaries: false
