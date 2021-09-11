@@ -3,12 +3,12 @@ benchmarks:
 concurrent_builds: null
 description: null
 docker_registry: gcr.io/fuzzbench
-experiment: chefuzzer
+experiment: testfuzzer
 experiment_filestore: /tmp/experiment-data
 fuzzers:
 - afl
 - che_fuzz
-git_hash: dadc20115d382a08b541c93136d47a39b7c1c9aa
+git_hash: 2634efb4b2c7e03f9da4e5a728a66c8b451a1af4
 local_experiment: true
 max_total_time: 60
 no_dictionaries: false
