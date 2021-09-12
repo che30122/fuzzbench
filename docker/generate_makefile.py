@@ -56,7 +56,7 @@ def _get_makefile_run_template(image):
             section += f'.{fuzzer}-{benchmark}-runner\n'
 
         section += f'\
-                \t docker run \\\n\
+\tdocker run \\\n\
 \t--cpus=1 \\\n\
 \t--cap-add SYS_NICE \\\n\
 \t--cap-add SYS_PTRACE \\\n\
