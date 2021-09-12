@@ -2,5 +2,5 @@
 PYTHONPATH=. python3 experiment/run_experiment.py \
 	--experiment-config exp_config.yaml \
 	--benchmarks freetype2-2017 \
-	--experiment-name ttttestfuzzer \
+	--experiment-name tttttestfuzzer \
 	--fuzzers afl che_fuzz
