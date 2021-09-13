@@ -381,7 +381,6 @@ class LocalDispatcher(BaseDispatcher):
         docker_image_url = '{docker_registry}/dispatcher-image'.format(
             docker_registry=docker_registry)
         command = [
-                'sudo',
             'docker',
             'run',
             '-ti',
