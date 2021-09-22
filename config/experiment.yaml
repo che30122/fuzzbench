@@ -6,7 +6,7 @@ benchmarks:
 concurrent_builds: null
 description: null
 docker_registry: gcr.io/fuzzbench
-experiment: test2plusfastfairche
+experiment: ttest2plusfastfairche
 experiment_filestore: /tmp/experiment-data
 fuzzers:
 - aflplusplus_optimal
@@ -14,7 +14,7 @@ fuzzers:
 - aflfast
 - fairfuzz
 - che_fuzz
-git_hash: 70d07f3807163e597fedb9468ad7d6d66447b0b1
+git_hash: fa1855cf674e682b0899e600a0ef062a63ea44ff
 local_experiment: true
 max_total_time: 180000
 no_dictionaries: false
