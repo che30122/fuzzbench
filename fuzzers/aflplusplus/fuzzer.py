@@ -21,6 +21,10 @@ from fuzzers.afl import fuzzer as afl_fuzzer
 from fuzzers import utils
 
 
+def get_prev_path_log_build_directory(target_directory):
+    """Return path to CmpLog target directory."""
+    return os.path.join(target_directory, 'prev_path_log')
+
 def get_cmplog_build_directory(target_directory):
     """Return path to CmpLog target directory."""
     return os.path.join(target_directory, 'cmplog')
@@ -172,7 +176,8 @@ def build(*args):  # pylint: disable=too-many-branches,too-many-statements
         # CmpLog requires an build with different instrumentation.
         new_env = os.environ.copy()
         new_env['AFL_LLVM_CMPLOG'] = '1'
-
+	new_env['AFL_LLVM_DONT_OPTIMIZE']= '1'
+	new_env['AFL_LLVM_INSTRUMENT']= 'CLASSIC'
         # For CmpLog build, set the OUT and FUZZ_TARGET environment
         # variable to point to the new CmpLog build directory.
         cmplog_build_directory = get_cmplog_build_directory(build_directory)
@@ -184,6 +189,27 @@ def build(*args):  # pylint: disable=too-many-branches,too-many-statements
                                                   os.path.basename(fuzz_target))
 
         print('Re-building benchmark for CmpLog fuzzing target')
+        utils.build_benchmark(env=new_env)
+
+    if 'prev_path_log' in build_modes and 'qemu' not in build_modes:
+
+        # CmpLog requires an build with different instrumentation.
+        new_env = os.environ.copy()
+        new_env['AFL_LLVM_CMPLOG'] = '1'
+	new_env['AFL_LLVM_DONT_OPTIMIZE']= '1'
+	new_env['AFL_LLVM_PREV_PATH']= '1'
+	new_env['AFL_LLVM_INSTRUMENT']= 'CLASSIC'
+        # For CmpLog build, set the OUT and FUZZ_TARGET environment
+        # variable to point to the new CmpLog build directory.
+        prev_path_log_build_directory = get_prev_path_log_build_directory(build_directory)
+        os.mkdir(prev_path_log_build_directory)
+        new_env['OUT'] = prev_path_log_build_directory
+        fuzz_target = os.getenv('FUZZ_TARGET')
+        if fuzz_target:
+            new_env['FUZZ_TARGET'] = os.path.join(prev_path_log__build_directory,
+                                                  os.path.basename(fuzz_target))
+
+        print('Re-building benchmark for prev_path_log fuzzing target')
         utils.build_benchmark(env=new_env)
 
     if 'symcc' in build_modes:
@@ -237,9 +263,13 @@ def fuzz(input_corpus,
     target_binary_directory = os.path.dirname(target_binary)
     cmplog_target_binary_directory = (
         get_cmplog_build_directory(target_binary_directory))
+    prev_path_log_target_binary_directory = (
+        get_prev_path_log_build_directory(target_binary_directory))
+
     target_binary_name = os.path.basename(target_binary)
     cmplog_target_binary = os.path.join(cmplog_target_binary_directory,
                                         target_binary_name)
+    prev_path_log_target_binary = os.path.join(cmplog_target_binary_directory,target_binary_name)
 
     afl_fuzzer.prepare_fuzz_environment(input_corpus)
     # decomment this to enable libdislocator.
@@ -253,8 +283,11 @@ def fuzz(input_corpus,
 
     # Move the following to skip for upcoming _double tests:
     if os.path.exists(cmplog_target_binary) and no_cmplog is not False:
-        flags += ['-c', cmplog_target_binary]
+        flags += ['-P', cmplog_target_binary]
 
+    if os.path.exists(prev_path_log_target_binary) :
+        flags += ['-z', prev_path_log_target_binary]
+   
     if not skip:
         os.environ['AFL_DISABLE_TRIM'] = "1"
         # os.environ['AFL_FAST_CAL'] = '1'
